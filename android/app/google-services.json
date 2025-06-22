@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1086783883734",
+    "project_id": "lab--signin-6e8c9",
+    "storage_bucket": "lab--signin-6e8c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086783883734:android:b54e4d9e09b4d83fe0fc77",
+        "android_client_info": {
+          "package_name": "com.example.google_singin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086783883734-ifn6bjlsd8q48gror5hec4ph23j3hj42.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.google_singin",
+            "certificate_hash": "98d006074df8529411391c348257df8e9a0260f4"
+          }
+        },
+        {
+          "client_id": "1086783883734-ksr0qj51bq8q73dpt4d0lm05ee32ssaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdIzIUpj4YhBWB0WbtrDoFMRKWFZrvvWI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086783883734-ksr0qj51bq8q73dpt4d0lm05ee32ssaj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086783883734-oi0ij0c2iog679fqj6i0fi4hr66ofgk7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.googleSingin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
