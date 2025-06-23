@@ -9,12 +9,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home Screen')),
-      body: _Body(),
+    return BlocListener<AuthCubit, AuthState>(
+      listenWhen: (previous, current) =>
+          current is Unauthenticated || current is Authenticated,
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          // Redirige de forma segura al login
+          Future.microtask(() => context.go('/login'));
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Home Screen')),
+        body: const _Body(),
+      ),
     );
   }
 }
+
 class _Body extends StatelessWidget {
   const _Body();
 
@@ -22,13 +33,6 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthCubit, AuthState>(
       builder: (context, state) {
-        if (state is Unauthenticated) {
-          if (context.mounted) {
-            context.go('/login');
-          }
-          return const SizedBox.shrink();
-        }
-
         if (state is Authenticated) {
           final user = state.user;
 
@@ -61,7 +65,6 @@ class _Body extends StatelessWidget {
           );
         }
 
-        // Mientras se determina el estado de autenticación
         return const Center(child: CircularProgressIndicator());
       },
     );

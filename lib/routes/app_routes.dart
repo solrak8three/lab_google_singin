@@ -13,18 +13,24 @@ GoRouter createRouter(AuthCubit authCubit) {
     initialLocation: '/login',
     refreshListenable: GoRouterRefreshStream(authCubit.stream),
     redirect: (context, state) {
+      print('🔄 redirect ejecutado - estado actual: ${authCubit.state}');
       final authState = authCubit.state;
-      
+
+      // Espera a que el estado inicial cambie
       if (authState is AuthInitial) return null;
 
       final isLoggedIn = authState is Authenticated;
-      final isLoggingIn = state.matchedLocation == '/login';
+      final isAtLogin = state.matchedLocation == '/login';
 
-      if (!isLoggedIn) {
-        return isLoggingIn ? null : '/login';
-      } else {
-        return isLoggingIn ? '/home' : null;
+      if (!isLoggedIn && !isAtLogin) {
+        return '/login';
       }
+
+      if (isLoggedIn && isAtLogin) {
+        return '/home';
+      }
+
+      return null;
     },
     routes: [
       GoRoute(
@@ -44,7 +50,11 @@ class GoRouterRefreshStream extends ChangeNotifier {
   late final StreamSubscription<dynamic> _subscription;
 
   GoRouterRefreshStream(Stream<dynamic> stream) {
-    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
+    _subscription = stream.listen((event) {
+      print('🔄 GoRouterRefreshStream: Evento recibido: $event');
+      notifyListeners();
+  });
+
   }
 
   @override
@@ -53,3 +63,4 @@ class GoRouterRefreshStream extends ChangeNotifier {
     super.dispose();
   }
 }
+
