@@ -9,10 +9,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: const _LoginBody(),
-    );
+    return Scaffold(backgroundColor: Colors.white, body: const _LoginBody());
   }
 }
 
@@ -22,50 +19,54 @@ class _LoginBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
+      builder: (context, state) => _Builder(state),
       listener: (context, state) {
         if (state is Authenticated) {
           context.go('/home');
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
-      builder: (context, state) {
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 40),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    minimumSize: const Size(double.infinity, 50),
-                    side: const BorderSide(color: Colors.grey),
-                    elevation: 2,
-                  ),
-                  icon: Image.asset(
-                    'assets/images/google_logo.png',
-                    height: 24,
-                  ),
-                  label: const Text('Continuar con Google'),
-                  onPressed: state is AuthLoading
+    );
+  }
+}
+
+class _Builder extends StatelessWidget {
+  const _Builder(this.autState);
+  final AuthState autState;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                minimumSize: const Size(double.infinity, 50),
+                side: const BorderSide(color: Colors.grey),
+                elevation: 2,
+              ),
+              icon: Image.asset('assets/images/google_logo.png', height: 24),
+              label: const Text('Continuar con Google'),
+              onPressed:
+                  autState is AuthLoading
                       ? null
                       : () => context.read<AuthCubit>().signInWithGoogle(),
-                ),
-                if (state is AuthLoading)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: CircularProgressIndicator(),
-                  ),
-              ],
             ),
-          ),
-        );
-      },
+            if (autState is AuthLoading)
+              const Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
