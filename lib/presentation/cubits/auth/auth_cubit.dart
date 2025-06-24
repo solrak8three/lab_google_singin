@@ -1,16 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_singin/infrastructure/mappers/user_mapper.dart';
-import 'package:google_singin/infrastructure/services/auth_services.dart';
+import 'package:google_singin/domain/services/auth_service.dart';
 import 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService _authService;
 
   AuthCubit(this._authService) : super(AuthInitial()) {
-    _authService.authStateChanges.listen((firebaseUser) {
-      if (firebaseUser != null) {
-        final domainUser = UserMapper.fromFirebase(firebaseUser);
-        emit(Authenticated(domainUser));
+    _authService.authStateChanges.listen((user) {
+      if (user != null) {
+        emit(Authenticated(user));
       } else {
         emit(Unauthenticated());
       }
@@ -20,9 +18,8 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signInWithGoogle() async {
     try {
       emit(AuthLoading());
-      final userCredential = await _authService.signInWithGoogle();
-      final domainUser = UserMapper.fromFirebase(userCredential.user!);
-      emit(Authenticated(domainUser));
+      final user = await _authService.signInWithGoogle();
+      emit(Authenticated(user));
     } catch (e) {
       emit(AuthError(e.toString()));
     }

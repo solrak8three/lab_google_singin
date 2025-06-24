@@ -10,12 +10,15 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthCubit, AuthState>(
-      listenWhen: (previous, current) =>
-          current is Unauthenticated || current is Authenticated,
+      listenWhen:
+          (previous, current) =>
+              current is Unauthenticated || current is Authenticated,
       listener: (context, state) {
         if (state is Unauthenticated) {
           // Redirige de forma segura al login
-          Future.microtask(() => context.go('/login'));
+          Future.microtask(() {
+            if (context.mounted) context.go('/login');
+          });
         }
       },
       child: Scaffold(
@@ -46,15 +49,9 @@ class _Body extends StatelessWidget {
                     backgroundImage: NetworkImage(user.photoUrl!),
                   ),
                 const SizedBox(height: 16),
-                Text(
-                  user.name,
-                  style: const TextStyle(fontSize: 20),
-                ),
+                Text(user.name, style: const TextStyle(fontSize: 20)),
                 const SizedBox(height: 8),
-                Text(
-                  user.email,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+                Text(user.email, style: const TextStyle(color: Colors.grey)),
                 const SizedBox(height: 20),
                 TextButton(
                   child: const Text('Sign Out'),
